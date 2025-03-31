@@ -1,0 +1,168 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 700px;
+    font-family: 'Arial', sans-serif;
+    background-color: #ffffff;
+    color: #333;
+}
+
+/* Header Styles */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 10px 20px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 100;
+}
+
+header h1 {
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.fig {
+    width: 900px;
+    background-color: #ffffff;
+}
+
+header nav ul {
+    list-style: none;
+}
+
+header nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+header nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+header nav ul li a:hover {
+    text-decoration: underline;
+}
+
+/* About Us Section */
+.about-us {
+    padding: 100px 20px;
+
+}
+
+.content {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgb(255, 255, 255);
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+p {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    text-align: justify;
+}
+
+.mission-vision {
+    width: 1200px;
+    position: absolute;
+    left: 92px;
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+    margin-bottom: 40px;
+}
+
+.mission,
+.vision {
+    flex: 1;
+    background-color: #b4d2ed;
+    padding: 20px;
+    border-radius: 12px;
+    width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.team {
+    margin-top: 40px;
+    background-color: white;
+    text-align: center;
+    position: absolute;
+    top: 780px;
+    left: 870px;
+}
+
+.team-members {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.member {
+    text-align: center;
+    background-color: white;
+}
+
+.members {
+    font-size: 22px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.member img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0);
+}
+
+.member h4 {
+    margin-top: 10px;
+    font-size: 20px;
+}
+
+.member p {
+    font-size: 16px;
+    color: #ffffff;
+}
+
+/* Footer Styles */
+footer {
+    background-color: rgba(0, 0, 0, 1);
+    padding: 5px;
+    bottom: 0px;
+
+    color: white;
+    position: fixed;
+    width: 100%;
+}
+
+footer div {
+    height: 30px;
+    margin: 0;
+    font-size: 15px;
+    text-align: center;
+}

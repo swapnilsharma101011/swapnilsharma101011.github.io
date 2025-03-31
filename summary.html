@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Summary of Crop Sold</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .total-cost {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .btn-container {
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Summary of Crops sold</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Industry</th>
+                    <th>City</th>
+                    <th>Crop</th>
+                    <th>Price (₹/Kg)</th>
+                    <th>Quantity (Kg)</th>
+                    <th>Total Cost (₹)</th>
+                </tr>
+            </thead>
+            <tbody id="dataTable"></tbody>
+        </table>
+
+        <div id="totalCostDisplay" class="total-cost">Total Cost: ₹0</div>
+
+        <div class="btn-container">
+            <a href="regional_selling.html" class="btn">Sell more crops (Region Wise)</a>
+            <a href="prices_yash.html" class="btn">Sell more crops (Crop Wise)</a>
+            <button class="btn" onclick="clearFields()">Clear Fields</button>
+        </div>
+    </div>
+
+    <script>
+        function loadData() {
+            let data = JSON.parse(localStorage.getItem("cropData")) || [];
+            let table = document.getElementById("dataTable");
+            let totalCost = 0;
+            table.innerHTML = "";
+
+            data.forEach(entry => {
+                totalCost += parseFloat(entry.totalCost);
+
+                let row = `<tr>
+                    <td>${entry.industry.replace("industry", "Industry ")}</td>
+                    <td>${entry.city}</td>
+                    <td>${entry.crop}</td>
+                    <td>₹${entry.price}</td>
+                    <td>${entry.quantity}</td>
+                    <td>₹${entry.totalCost}</td>
+                </tr>`;
+                table.innerHTML += row;
+            });
+
+            document.getElementById("totalCostDisplay").innerText = `Total Cost: ₹${totalCost}`;
+        }
+
+        function clearFields() {
+            localStorage.setItem("cropData", JSON.stringify([]));
+            loadData();
+        }
+
+        window.onload = loadData;
+    </script>
+
+</body>
+</html>

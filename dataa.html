@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Summary</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
+        header, footer { background-color: #4CAF50; color: white; text-align: center; padding: 15px; }
+        .container { max-width: 800px; margin: 30px auto; padding: 20px; background: white; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #4CAF50; color: white; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>User Summary</h1>
+</header>
+<div class="container">
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Username</th>
+                <th>Password</th>
+            </tr>
+        </thead>
+        <tbody id="userTable">
+        </tbody>
+    </table>
+</div>
+<footer>
+    <p>&copy; 2025 KrishiMitra | All Rights Reserved.</p>
+    <button onclick="clearStorage()">Clear Data</button>
+</footer>
+<script>
+function clearStorage() {
+    localStorage.clear();
+    alert("Local storage cleared!");
+    location.reload(); // Reload page to reflect changes
+}
+
+
+    function loadUsers() {
+        let tableBody = document.getElementById("userTable");
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+
+        tableBody.innerHTML = '';
+
+        if (users.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="4">No user data found</td></tr>';
+            return;
+        }
+
+        users.forEach(user => {
+            let row = `<tr>
+                <td>${user.name}</td>
+                <td>${user.email}</td>
+                <td>${user.username}</td>
+                <td>${user.password}</td>
+            </tr>`;
+            tableBody.innerHTML += row;
+        });
+    }
+    window.onload = loadUsers;
+</script>
+</body>
+</html>

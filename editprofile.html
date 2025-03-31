@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            font-size: 16px;
+            margin: 10px 0;
+            display: block;
+            color: #333;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Edit Profile</h2>
+
+        <!-- Form to edit user profile details -->
+        <form id="editProfileForm" onsubmit="updateProfile(event)">
+            <!-- Hidden input to store the current username -->
+            <input type="hidden" id="username" name="username">
+
+            <!-- Name input -->
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name">
+
+            <!-- Email input -->
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email">
+
+            <!-- Password input -->
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password">
+
+            <!-- Submit button -->
+            <button type="submit">Update Profile</button>
+        </form>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 KrishiMitra | All Rights Reserved.</p>
+    </div>
+
+    <script>
+        // Function to load user details from local storage
+        window.onload = function() {
+            const currentUser = localStorage.getItem('current'); // Retrieve the current username from local storage
+            if (currentUser) {
+                document.getElementById('username').value = currentUser;
+
+                // Load existing data for the current user if available
+                let users = JSON.parse(localStorage.getItem('users')) || [];
+                let currentUserData = users.find(user => user.username === currentUser);
+
+                if (currentUserData) {
+                    document.getElementById('name').value = currentUserData.name;
+                    document.getElementById('email').value = currentUserData.email;
+                }
+            }
+        };
+
+        // Update profile in local storage when the form is submitted
+        function updateProfile(event) {
+            event.preventDefault(); // Prevent form submission (page reload)
+
+            const username = document.getElementById('username').value;
+            const name = document.getElementById('name').value.trim() || null; // If empty, retain previous value
+            const email = document.getElementById('email').value.trim() || null; // If empty, retain previous value
+            const password = document.getElementById('password').value.trim() || null; // If empty, retain previous value
+
+            // Retrieve the users array from local storage
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+
+            // Find the existing user to update or add a new one
+            let existingUserIndex = users.findIndex(user => user.username === username);
+            if (existingUserIndex !== -1) {
+                // Update the existing user's data, retain previous data if empty
+                let currentUserData = users[existingUserIndex];
+                users[existingUserIndex].name = name || currentUserData.name;
+                users[existingUserIndex].email = email || currentUserData.email;
+                users[existingUserIndex].password = password || currentUserData.password;
+            } else {
+                // Add a new user to the array if not found
+                users.push({
+                    username: username,
+                    name: name || "Unnamed",
+                    email: email || "No Email",
+                    password: password || "No Password"
+                });
+            }
+
+            // Save the updated users array back to localStorage
+            localStorage.setItem('users', JSON.stringify(users));
+
+            // Optionally, update the current session username
+            localStorage.setItem('current', username);
+
+            alert("Profile updated successfully!");
+        }
+    </script>
+
+</body>
+</html>

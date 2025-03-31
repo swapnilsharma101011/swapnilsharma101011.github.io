@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income & Expenses - Farmers' Market Access</title>
+    <link rel="stylesheet" href="income-expenses.css">
+    <link rel="icon" href="imgsih.png.jpg">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <h1>KrishiMitra</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="prices_yash.html">Market Prices</a></li>
+                <li><a href="Aboutus.html">About Us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="income-expenses">
+        <div class="content">
+            <h2>Income and Expenses (2018 - Present)</h2>
+
+            <!-- Display local time -->
+            <div id="localTime"></div>
+
+            <table id="incomeTable">
+                <thead>
+                    <tr>
+                        <th>Year</th>
+                        <th>Income (₹)</th>
+                        <th>Expenses (₹)</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Table rows will be dynamically generated here -->
+                </tbody>
+            </table>
+
+            <div class="new-year-section">
+                <h3>Add Data for Current Year</h3>
+                <input id="newIncome" type="number" placeholder="Enter Income">
+                <input id="newExpense" type="number" placeholder="Enter Expense">
+                <button id="addYearBtn">Update Current Year</button>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="incomeExpenseChart"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; KrishiMitra | All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let years = [2018, 2019, 2020, 2021, 2022, 2023, 2024];
+            let incomes = [100000, 120000, 150000, 160000, 170000, 200000, 200000];
+            let expenses = [60000, 70000, 90000, 95000, 100000, 110000, 110000];
+
+            // Load saved data from local storage
+            if (localStorage.getItem("years")) {
+                years = JSON.parse(localStorage.getItem("years"));
+                incomes = JSON.parse(localStorage.getItem("incomes"));
+                expenses = JSON.parse(localStorage.getItem("expenses"));
+            }
+
+            // Function to update the table
+            function updateTable() {
+                let tableBody = document.getElementById("tableBody");
+                tableBody.innerHTML = "";
+
+                for (let i = 0; i < years.length; i++) {
+                    let row = `<tr>
+                        <td>${years[i]}</td>
+                        <td>₹${incomes[i].toLocaleString()}</td>
+                        <td>₹${expenses[i].toLocaleString()}</td>
+                    </tr>`;
+                    tableBody.innerHTML += row;
+                }
+            }
+
+            // Display current local time
+            function displayLocalTime() {
+                const now = new Date();
+                const options = {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                };
+                document.getElementById('localTime').innerText = now.toLocaleString('en-US', options);
+            }
+
+            // Initialize Chart
+            let ctx = document.getElementById("incomeExpenseChart").getContext("2d");
+            let incomeExpenseChart = new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: years,
+                    datasets: [
+                        {
+                            label: "Income",
+                            data: incomes,
+                            backgroundColor: "rgba(75, 192, 192, 0.2)",
+                            borderColor: "rgba(75, 192, 192, 1)",
+                            borderWidth: 2,
+                            pointBackgroundColor: "rgba(75, 192, 192, 1)",
+                        },
+                        {
+                            label: "Expenses",
+                            data: expenses,
+                            backgroundColor: "rgba(255, 99, 132, 0.2)",
+                            borderColor: "rgba(255, 99, 132, 1)",
+                            borderWidth: 2,
+                            pointBackgroundColor: "rgba(255, 99, 132, 1)",
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                        },
+                    },
+                },
+            });
+
+            // Function to update the chart
+            function updateChart() {
+                incomeExpenseChart.data.labels = years;
+                incomeExpenseChart.data.datasets[0].data = incomes;
+                incomeExpenseChart.data.datasets[1].data = expenses;
+                incomeExpenseChart.update();
+            }
+
+            // Get the current year and lock previous years
+            const currentYear = new Date().getFullYear();
+            const currentYearIndex = years.indexOf(currentYear);
+
+            if (currentYearIndex === -1) {
+                years.push(currentYear);
+                incomes.push(0);
+                expenses.push(0);
+                localStorage.setItem("years", JSON.stringify(years));
+                localStorage.setItem("incomes", JSON.stringify(incomes));
+                localStorage.setItem("expenses", JSON.stringify(expenses));
+            }
+
+            // Disable inputs if the year is not the current year
+            if (years.length > 0) {
+                document.getElementById("newIncome").disabled = false;
+                document.getElementById("newExpense").disabled = false;
+            }
+
+            // Handle updating current year data
+            document.getElementById("addYearBtn").addEventListener("click", function () {
+                let newIncome = document.getElementById("newIncome").value;
+                let newExpense = document.getElementById("newExpense").value;
+
+                if (!newIncome || !newExpense) {
+                    alert("Please enter both income and expense values!");
+                    return;
+                }
+
+                newIncome = parseInt(newIncome);
+                newExpense = parseInt(newExpense);
+
+                // Update only current year
+                incomes[currentYearIndex] = newIncome;
+                expenses[currentYearIndex] = newExpense;
+
+                // Save to local storage
+                localStorage.setItem("incomes", JSON.stringify(incomes));
+                localStorage.setItem("expenses", JSON.stringify(expenses));
+
+                updateTable();
+                updateChart();
+            });
+
+            // Initial table load
+            updateTable();
+            displayLocalTime();
+            setInterval(displayLocalTime, 1000); // Update time every second
+        });
+    </script>
+</body>
+
+</html>

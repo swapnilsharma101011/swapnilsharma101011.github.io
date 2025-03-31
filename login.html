@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KrishiMitra Login</title>
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            width: 220px;
+        }
+        .modal button {
+            margin-top: 10px;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('https://esamridhi.in/assets/images/heroImg2.jpg');
+            background-size: cover;
+        }
+        .login-box {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            color: white;
+            width: 320px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .input-group input {
+            width: 90%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #000000; 
+            background-color: #fff;
+        }
+        .btn {
+            background: #f92d56;
+            color: white;
+            padding: 10px;
+            border: none;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px; 
+        }
+        .btn:hover {
+            background: #d81e3e;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0);
+            width: 320px;
+        }
+        .popup .input-group input {
+            border: 2px solid #000000;
+        }
+    </style>
+</head>
+<body>
+    <div id="modalPopup" class="modal">
+        <p id="modalMessage"></p>
+        <button onclick="closeModal()">OK</button>
+    </div>
+
+    <div class="login-box">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <div class="input-group">
+                <label>Username</label>
+                <input type="text" id="loginUsername" required>
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="loginPassword" required>
+            </div>
+            <button type="submit" class="btn">Login</button>
+        </form>
+        <button id="signupBtn" class="btn">Sign Up</button>
+        <button id="forgotPasswordBtn" class="btn">Forgot Password?</button>
+        <p id="errorMessage" style="color: red;"></p>
+    </div>
+
+    <div class="popup" id="signupPopup">
+        <h2>Sign Up</h2>
+        <div class="input-group">
+            <label>Name</label>
+            <input type="text" id="name" required>
+        </div>
+        <div class="input-group">
+            <label>Email</label>
+            <input type="email" id="email" required>
+        </div>
+        <div class="input-group">
+            <label>Username</label>
+            <input type="text" id="signupUsername" required>
+        </div>
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" id="signupPassword" required>
+        </div>
+        <button id="registerBtn" class="btn">Register</button>
+        <button onclick="closePopup()" class="btn">Close</button>
+    </div>
+
+    <div class="popup" id="forgotPasswordPopup">
+        <h2>Reset Password</h2>
+        <div class="input-group">
+            <label>Username</label>
+            <input type="text" id="forgotUsername" required>
+        </div>
+        <div class="input-group">
+            <label>Email</label>
+            <input type="email" id="forgotEmail" required>
+        </div>
+        <div class="input-group">
+            <label>New Password</label>
+            <input type="password" id="newPassword" required>
+        </div>
+        <button id="resetPasswordBtn" class="btn">Reset Password</button>
+        <button onclick="closeForgotPasswordPopup()" class="btn">Close</button>
+    </div>
+
+    <script>
+        function showModal(message) {
+            document.getElementById('modalMessage').textContent = message;
+            document.getElementById('modalPopup').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('modalPopup').style.display = 'none';
+        }
+        document.getElementById('signupBtn').addEventListener('click', function() {
+            document.getElementById('signupPopup').style.display = 'block';
+        });
+
+        function closePopup() {
+            document.getElementById('signupPopup').style.display = 'none';
+        }
+
+        document.getElementById('registerBtn').addEventListener('click', function() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const username = document.getElementById('signupUsername').value;
+            const password = document.getElementById('signupPassword').value;
+
+            // Email regex pattern for validation
+            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
+            if (name && email && username && password.length >= 6) {
+                if (!emailPattern.test(email)) {
+                    showModal('Please enter a valid email address!');
+                    return;
+                }
+
+                let users = JSON.parse(localStorage.getItem('users')) || [];
+                if (users.some(user => user.username === username)) {
+                    showModal('Username already exists!');
+                    return;
+                }
+                users.push({ name, email, username, password });
+                localStorage.setItem('users', JSON.stringify(users));
+                showModal('Account created successfully!');
+                closePopup();
+            } else {
+                showModal('All fields are required, and password must be at least 6 characters!');
+            }
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            let userFound = users.find(user => user.username === username && user.password === password);
+
+            if (userFound) {
+                showModal('Login successful!');
+                localStorage.setItem('current', username);
+                window.location.href = 'index.html';
+            } else {
+                document.getElementById('errorMessage').textContent = 'Invalid credentials';
+            }
+        });
+
+        document.getElementById('forgotPasswordBtn').addEventListener('click', function() {
+            document.getElementById('forgotPasswordPopup').style.display = 'block';
+        });
+
+        function closeForgotPasswordPopup() {
+            document.getElementById('forgotPasswordPopup').style.display = 'none';
+        }
+
+        document.getElementById('resetPasswordBtn').addEventListener('click', function() {
+            const username = document.getElementById('forgotUsername').value;
+            const email = document.getElementById('forgotEmail').value;
+            const newPassword = document.getElementById('newPassword').value;
+
+            // Email regex pattern for validation
+            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
+            if (!emailPattern.test(email)) {
+                showModal('Please enter a valid email address!');
+                return;
+            }
+
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            let userIndex = users.findIndex(user => user.username === username && user.email === email);
+
+            if (userIndex !== -1) {
+                users[userIndex].password = newPassword;
+                localStorage.setItem('users', JSON.stringify(users));
+                showModal('Password reset successfully!');
+                closeForgotPasswordPopup();
+            } else {
+                showModal('No user found with the provided details.');
+            }
+        });
+    </script>
+</body>
+</html>

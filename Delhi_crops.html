@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sell Your Crops - Store Data</title>
+    <style>
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        .industry {
+            margin: 10px 0;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .submit-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+        }
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
+        .total-cost {
+            font-weight: bold;
+            color: #333;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #4CAF50;
+            color: white;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div id="notification" style="  display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #af4c4c; color: red; padding: 10px 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);"></div>
+
+
+<header>
+    <h1>Sell your crops to industries in Delhi</h1>
+    <button style="background-color: green; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;" onclick="window.location.href='regional_selling.html'">Go back</button>
+</header>
+
+<div class="container">
+    <h2>City: Delhi (Fixed)</h2>
+    <h2>Crops: Select Below</h2>
+
+    <div class="industry">
+        <h3>Select Industry</h3>
+        <select id="industry">
+            <option value="Food Processing Industry">Food Processing Industry</option>
+            <option value="Rice Exporters">Rice Exporters</option>
+            <option value="Beverage Industry">Beverage Industry</option>
+            <option value="Textile Industry">Textile Industry</option>
+        </select>
+
+        <h3>Select Crop</h3>
+        <select id="crop" onchange="updatePrice()">
+            <option value="Peas" data-price="40">Peas - ₹40/kg</option>
+            <option value="Tomato" data-price="50">Tomato - ₹50/kg</option>
+            <option value="Onion" data-price="30">Onion - ₹30/kg</option>
+            <option value="Potato" data-price="25">Potato - ₹25/kg</option>
+            <option value="Rice" data-price="60">Rice - ₹60/kg</option>
+            <option value="Wheat" data-price="55">Wheat - ₹55/kg</option>
+            <option value="Barley" data-price="45">Barley - ₹45/kg</option>
+            <option value="Cabbage" data-price="35">Cabbage - ₹35/kg</option>
+            <option value="Carrot" data-price="42">Carrot - ₹42/kg</option>
+            <option value="Broccoli" data-price="70">Broccoli - ₹70/kg</option>
+            <option value="Maize" data-price="38">Maize - ₹38/kg</option>
+            <option value="Spinach" data-price="32">Spinach - ₹32/kg</option>
+        </select>
+
+        <h3>Enter Quantity (Kg)</h3>
+        <input type="number" id="quantity" placeholder="Enter quantity" oninput="calculateTotal()">
+        
+        <p class="total-cost">Total Cost: ₹<span id="total-cost">0</span></p>
+
+        <button class="submit-btn" onclick="storeData()">Submit</button>
+    </div>
+</div>
+<div class="btn-container">
+   <button><a href="summary.html" class="btn">View Summary</a></button>
+</div>
+
+<footer>
+    <p>&copy; 2025 KrishiMitra | All Rights Reserved.</p>
+</footer>
+
+<script>
+    function updatePrice() {
+        let cropSelect = document.getElementById("crop");
+        let selectedOption = cropSelect.options[cropSelect.selectedIndex];
+        let price = selectedOption.getAttribute("data-price");
+        document.getElementById("quantity").value = "";
+        document.getElementById("total-cost").innerText = "0";
+    }
+
+    function calculateTotal() {
+        let quantity = document.getElementById("quantity").value;
+        let cropSelect = document.getElementById("crop");
+        let price = cropSelect.options[cropSelect.selectedIndex].getAttribute("data-price");
+        let total = quantity * price;
+        document.getElementById("total-cost").innerText = total;
+    }
+
+    function showNotification(message, duration = 3000) {
+    let notification = document.getElementById("notification");
+    notification.innerText = message;
+    notification.style.display = "block";
+
+    setTimeout(() => {
+        notification.style.display = "none";
+    }, duration);
+}
+
+function storeData() {
+    let city = "Delhi";
+    let industry = document.getElementById("industry").value;
+    let cropSelect = document.getElementById("crop");
+    let crop = cropSelect.value;
+    let price = cropSelect.options[cropSelect.selectedIndex].getAttribute("data-price");
+    let quantity = document.getElementById("quantity").value;
+    let totalCost = quantity * price;
+
+    if (quantity <= 0) {
+        showNotification("Please enter a valid quantity", 3000);
+        return;
+    }
+
+    let data = JSON.parse(localStorage.getItem("cropData")) || [];
+    data.push({ city, industry, crop, price, quantity, totalCost });
+    localStorage.setItem("cropData", JSON.stringify(data));
+
+    showNotification("Data saved successfully!", 3000);
+}
+
+</script>
+
+</body>
+</html>

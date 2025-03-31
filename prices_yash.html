@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Price</title>
+    <link rel="stylesheet" href="prices_yash.css">
+    <link rel="icon" href="imgsih.png.jpg">
+</head>
+
+
+
+<body>
+    <!-- Header Section -->
+    <header>
+        <h1>KrishiMitra</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <!-- <li><a href="prices_yash.html">Market Prices</a></li> -->
+                <li><a href="income-expenses.html">Income & Expenses</a></li>
+                <li><a href="Aboutus.html">About Us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        
+        <section class="crops-section">
+            <h2>Select a Crop or Vegetable to View Prices</h2>
+            <div class="crop-list">
+                <!-- 4 Existing Crops -->
+                <div class="crop" id="rice" onclick="showPrices('Rice')">
+                    <a href="rice_page.html" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/541/541847.png" alt="Rice"></a>
+                    <h3>Rice</h3>
+                    <!-- <h3>Rice</h3> -->
+                </div>
+                <div class="crop" id="wheat" onclick="showPrices('Wheat')">
+                    <a href="wheat_page.html" target="_blank"><img
+                            src="https://icons.veryicon.com/png/o/miscellaneous/huinong-jubao-pc-icon/wheat-3.png"
+                            alt="Wheat"></a>
+                    <h3>Wheat</h3>
+                </div>
+                <div class="crop" id="barley" onclick="showPrices('Barley')">
+                    <a href="barley_page.html" target="_blank"><img
+                            src="https://icons.iconarchive.com/icons/icons8/windows-8/512/Plants-Barley-icon.png"
+                            alt="Barley"></a>
+                    <h3>Barley</h3>
+                </div>
+                <div class="crop" id="maize" onclick="showPrices('Maize')">
+                    <a href="maize_page.html" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/3579/3579256.png"
+                            alt="Maize"></a>
+                    <h3>Maize</h3>
+                </div>
+
+                <!-- 8 New Vegetables -->
+                <div class="crop" id="tomato" onclick="showPrices('Tomato')">
+                    <a href="tomato_page.html" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/135/135471.png"
+                            alt="Tomato"></a>
+                    <h3>Tomato</h3>
+                </div>
+                <div class="crop" id="potato" onclick="showPrices('Potato')">
+                    <a href="potato_page.html" target="_blank"><img src="https://cdn-icons-png.flaticon.com/128/4416/4416758.png"
+                            alt="Potato"></a>
+                    <h3>Potato</h3>
+                </div>
+                <div class="crop" id="onion" onclick="showPrices('Onion')">
+                    <a href="onion_page.html" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/3823/3823172.png"
+                            alt="Onion"></a>
+                    <h3>Onion</h3>
+                </div>
+                <div class="crop" id="carrot" onclick="showPrices('Carrot')">
+                    <a href="carrot_page.html" target="_blank"><img
+                            src="https://icons.veryicon.com/png/o/food--drinks/catering-category/carrot-15.png"
+                            alt="Carrot"></a>
+                    <h3>Carrot</h3>
+                </div>
+                <div class="crop" id="spinach" onclick="showPrices('Spinach')">
+                    <a href="spinach_page.html" target="_blank"><img src="https://static.thenounproject.com/png/679287-200.png"
+                            alt="Spinach"></a>
+                    <h3>Spinach</h3>
+                </div>
+                <div class="crop" id="cabbage" onclick="showPrices('Cabbage')">
+                    <a href="cabbage_page.html" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/3823/3823273.png"
+                            alt="Cabbage"></a>
+                    <h3>Cabbage</h3>
+                </div>
+                <div class="crop" id="peas" onclick="showPrices('Peas')">
+                    <a href="peas_page.html" target="_blank"><img src="https://static.thenounproject.com/png/3997586-200.png" alt="Peas"></a>
+                    <h3>Peas</h3>
+                </div>
+                <div class="crop" id="broccoli" onclick="showPrices('Broccoli')">
+                    <a href="brocolli_page.html" target="_blank"><img
+                            src="https://icons.veryicon.com/png/o/food--drinks/vegetables-1/broccoli-2.png"
+                            alt="Broccoli"></a>
+                    <h3>Broccoli</h3>
+                </div>
+            </div>
+        </section>
+
+        <!-- Prices Section -->
+        <section class="prices-section" id="prices-section">
+            <h2 id="crop-name"></h2>
+            <div class="prices-content">
+                <ul id="price-list">
+                    <!-- Prices will be inserted dynamically here -->
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; KrishiMitra | All Rights Reserved.</p>
+    </footer>
+
+    <script src="prices_yash.js"></script>
+</body>
+
+</html>

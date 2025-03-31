@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="imgsih.png.jpg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Farmers' Market Access - Home</title>
+    <link rel="stylesheet" href="landing.css">
+    <style>
+        /* Add this CSS code inside the style section */
+
+        /* Style for Call to Action (CTA) buttons */
+        .cta-button {
+            background-color: #4CAF50; /* Green background */
+            color: white; /* White text color */
+            padding: 15px 25px; /* Space inside the button */
+            font-size: 16px; /* Text size */
+            text-align: center; /* Center the text */
+            text-decoration: none; /* Remove underline */
+            border-radius: 8px; /* Rounded corners */
+            transition: background-color 0.3s, transform 0.2s ease; /* Smooth transition */
+            display: inline-block;
+            margin: 10px 0;
+        }
+
+        /* Hover effect for CTA buttons */
+        .cta-button:hover {
+            background-color: #45a049; /* Slightly darker green */
+            transform: scale(1.05); /* Slightly enlarge the button */
+        }
+
+        /* Add focus outline for accessibility */
+        .cta-button:focus {
+            outline: 2px solid #2e7d32; /* Darker green outline when button is focused */
+            outline-offset: 2px;
+        }
+
+        /* Active state for button */
+        .cta-button:active {
+            background-color: #388e3c; /* Even darker green when clicked */
+        }
+
+        .profile-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .profile-dropdown button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .profile-dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 150px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            z-index: 1;
+        }
+
+        .profile-dropdown-content a {
+            color: black;
+            padding: 10px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .profile-dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .profile-dropdown:hover .profile-dropdown-content {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <h1>KrishiMitra</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="prices_yash.html" style="text-decoration: none;">Market Prices</a></li>
+                <li><a href="income-expenses.html" style="text-decoration: none;">Income & Expenses</a></li>
+                <li>
+                    <div class="dropdown">
+                        <button class="dropbtn">Services</button>
+                        <div class="dropdown-content">
+                            <a href="governmentsch.html" style="text-decoration: none;">Govt. Schemes</a>
+                            <a href="askAI.html" style="text-decoration: none;">Ask AI</a>
+                            <a href="learn.html" style="text-decoration: none;">Learn</a>
+                            <a href="weather.html">Weather Update</a>
+                        </div>
+                    </div>
+                </li>
+                <li><a href="Aboutus.html" style="text-decoration: none;">About Us</a></li>
+                <li>
+                    <div class="profile-dropdown">
+                        <button>Profile</button>
+                        <div class="profile-dropdown-content">
+                            <a href="editprofile.html">Edit Profile</a>
+                            <a href="login.html">Logout</a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Background image using img tag -->
+        <div class="background-container">
+            <img src="https://kansaslivingmagazine.com/sites/default/files/farmer_10things.jpg"
+                alt="Farm background image" class="bg-image">
+            <div class="content-overlay">
+                <h1>Empowering Farmers with Market Insights</h1>
+                <p>Get real-time access to market prices, income and expense tracking, and valuable insights to help
+                    your farm thrive.</p>
+                <a href="regional_selling.html" class="cta-button">Region Wise Prices</a>
+                <a href="prices_yash.html" class="cta-button">Crop Wise Prices</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; KrishiMitra | All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Check if the 'current' variable is set in localStorage
+        const currentUsername = localStorage.getItem('current');
+        
+        // If the username is found, change the profile button text to the username
+        if (currentUsername) {
+            const profileButton = document.querySelector('.profile-dropdown button');
+            profileButton.textContent = currentUsername; // Update the button text with the username
+        }
+    </script>
+</body>
+
+</html>
