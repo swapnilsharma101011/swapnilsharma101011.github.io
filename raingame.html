@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Avoid the Rain</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #87CEEB;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #game {
+            position: relative;
+            width: 300px;
+            height: 400px;
+            margin: 20px auto;
+            background: linear-gradient(to bottom, #87CEEB, #E0F7FA);
+            border: 3px solid #333;
+            overflow: hidden;
+        }
+        #player {
+            position: absolute;
+            bottom: 20px;
+            left: 135px;
+            width: 30px;
+            height: 30px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%23FF5722"/><circle cx="35" cy="40" r="5" fill="%23FFF"/><circle cx="65" cy="40" r="5" fill="%23FFF"/><path d="M30,65 Q50,80 70,65" stroke="%23FFF" stroke-width="3" fill="none"/></svg>');
+            z-index: 10;
+        }
+        .rain {
+            position: absolute;
+            width: 5px;
+            height: 20px;
+            background: linear-gradient(to bottom, #BBDEFB, #2196F3);
+            border-radius: 0 0 5px 5px;
+        }
+        .coin {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%23FFD700"/><circle cx="50" cy="50" r="30" fill="%23FFEB3B"/><text x="50" y="60" font-size="40" text-anchor="middle" fill="%23FF9800">$</text></svg>');
+            background-size: contain;
+            z-index: 5;
+        }
+        #score {
+            font-size: 24px;
+            margin: 10px;
+            color: #333;
+        }
+        #controls {
+            margin: 10px;
+        }
+        button {
+            padding: 8px 15px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+            z-index: 20;
+        }
+    </style>
+</head>
+<body>
+    <h1>Avoid the Rain</h1>
+    <div id="score">Score: 0</div>
+    <div id="game">
+        <div id="player"></div>
+        <div id="game-over">
+            <h2>Game Over!</h2>
+            <p id="final-score">Score: 0</p>
+            <button onclick="startGame()">Play Again</button>
+        </div>
+    </div>
+    <div id="controls">
+        <button onclick="startGame()">Start Game</button>
+    </div>
+
+    <script>
+        // Game elements
+        const game = document.getElementById('game');
+        const player = document.getElementById('player');
+        const scoreDisplay = document.getElementById('score');
+        const gameOverDisplay = document.getElementById('game-over');
+        const finalScoreDisplay = document.getElementById('final-score');
+
+        // Game variables
+        let score = 0;
+        let gameRunning = false;
+        let playerX = 135;
+        let rainSpeed = 3;
+        let coinSpeed = 2;
+        let rainInterval;
+        let coinInterval;
+        let gameLoop;
+        let elements = []; // Track all falling elements
+
+        // Start the game
+        function startGame() {
+            // Reset game state
+            score = 0;
+            scoreDisplay.textContent = `Score: ${score}`;
+            playerX = 135;
+            player.style.left = `${playerX}px`;
+            gameRunning = true;
+            gameOverDisplay.style.display = 'none';
+            rainSpeed = 3;
+            
+            // Clear existing elements
+            elements.forEach(el => {
+                if (el.element && el.element.parentNode) {
+                    game.removeChild(el.element);
+                }
+            });
+            elements = [];
+            
+            // Start game loops
+            rainInterval = setInterval(createRain, 800);
+            coinInterval = setInterval(createCoin, 2000);
+            gameLoop = requestAnimationFrame(updateGame);
+            
+            // Increase difficulty over time
+            setTimeout(() => rainSpeed = 4, 15000);
+            setTimeout(() => rainSpeed = 5, 30000);
+        }
+
+        // Create falling rain
+        function createRain() {
+            if (!gameRunning) return;
+            
+            const rain = document.createElement('div');
+            rain.className = 'rain';
+            rain.style.left = `${Math.random() * (game.offsetWidth - 10)}px`;
+            rain.style.top = '0px';
+            game.appendChild(rain);
+            
+            elements.push({
+                element: rain,
+                type: 'rain',
+                y: 0,
+                speed: rainSpeed
+            });
+        }
+
+        // Create collectible coins
+        function createCoin() {
+            if (!gameRunning) return;
+            
+            const coin = document.createElement('div');
+            coin.className = 'coin';
+            coin.style.left = `${Math.random() * (game.offsetWidth - 20)}px`;
+            coin.style.top = '0px';
+            game.appendChild(coin);
+            
+            elements.push({
+                element: coin,
+                type: 'coin',
+                y: 0,
+                speed: coinSpeed
+            });
+        }
+
+        // Main game update loop
+        function updateGame() {
+            if (!gameRunning) return;
+            
+            // Update all elements
+            for (let i = elements.length - 1; i >= 0; i--) {
+                const item = elements[i];
+                item.y += item.speed;
+                item.element.style.top = `${item.y}px`;
+                
+                // Check if element reached bottom
+                if (item.y > game.offsetHeight) {
+                    game.removeChild(item.element);
+                    elements.splice(i, 1);
+                    continue;
+                }
+                
+                // Check collision with player
+                if (isColliding(item.element, player)) {
+                    if (item.type === 'rain') {
+                        endGame();
+                        break;
+                    } else if (item.type === 'coin') {
+                        score += 10;
+                        scoreDisplay.textContent = `Score: ${score}`;
+                        game.removeChild(item.element);
+                        elements.splice(i, 1);
+                    }
+                }
+            }
+            
+            gameLoop = requestAnimationFrame(updateGame);
+        }
+
+        // Collision detection
+        function isColliding(a, b) {
+            const aRect = a.getBoundingClientRect();
+            const bRect = b.getBoundingClientRect();
+            
+            return !(
+                aRect.bottom < bRect.top ||
+                aRect.top > bRect.bottom ||
+                aRect.right < bRect.left ||
+                aRect.left > bRect.right
+            );
+        }
+
+        // End the game
+        function endGame() {
+            gameRunning = false;
+            clearInterval(rainInterval);
+            clearInterval(coinInterval);
+            cancelAnimationFrame(gameLoop);
+            
+            finalScoreDisplay.textContent = `Final Score: ${score}`;
+            gameOverDisplay.style.display = 'block';
+        }
+
+        // Keyboard controls
+        document.addEventListener('keydown', (e) => {
+            if (!gameRunning) return;
+            
+            if (e.key === 'ArrowLeft' && playerX > 0) {
+                playerX -= 15;
+            } else if (e.key === 'ArrowRight' && playerX < game.offsetWidth - 30) {
+                playerX += 15;
+            }
+            
+            player.style.left = `${playerX}px`;
+        });
+
+        // Touch controls for mobile
+        game.addEventListener('touchmove', (e) => {
+            if (!gameRunning) return;
+            
+            e.preventDefault();
+            const touchX = e.touches[0].clientX - game.getBoundingClientRect().left;
+            
+            if (touchX > 15 && touchX < game.offsetWidth - 15) {
+                playerX = touchX - 15;
+                player.style.left = `${playerX}px`;
+            }
+        });
+    </script>
+</body>
+</html>
