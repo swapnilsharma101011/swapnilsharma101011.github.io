@@ -12,30 +12,56 @@
             height: 100vh;
             background-color: #222;
             flex-direction: column;
+            font-family: Arial, sans-serif;
         }
         canvas {
             border: 2px solid white;
+            display: none; /* Initially hidden */
         }
         #score {
             color: white;
             font-size: 20px;
             margin-bottom: 10px;
+            display: none; /* Initially hidden */
+        }
+        #startButton {
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        #startButton:hover {
+            background-color: #45a049;
+        }
+        #gameTitle {
+            color: white;
+            font-size: 36px;
+            margin-bottom: 30px;
         }
     </style>
 </head>
 <body>
+    <h1 id="gameTitle">Snake Game</h1>
+    <button id="startButton">Start Game</button>
     <div id="score">Score: 0</div>
     <canvas id="gameCanvas" width="600" height="600"></canvas>
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
         const scoreElement = document.getElementById("score");
+        const startButton = document.getElementById("startButton");
+        const gameTitle = document.getElementById("gameTitle");
 
-        const box = 40; // Increased the grid size
+        const box = 40;
         let snake = [{ x: 200, y: 200 }];
         let food = { x: 160, y: 160 };
         let dx = box, dy = 0;
         let score = 0;
+        let gameInterval;
 
         // Load images
         const headImage = new Image();
@@ -76,8 +102,7 @@
             // Check for collision
             if (head.x < 0 || head.y < 0 || head.x >= canvas.width || head.y >= canvas.height || 
                 snake.some(segment => segment.x === head.x && segment.y === head.y)) {
-                alert("Game Over! Your Score: " + score);
-                document.location.reload();
+                gameOver();
             }
 
             snake.unshift(head);
@@ -96,12 +121,44 @@
             }
         }
 
-        document.addEventListener("keydown", changeDirection);
+        function startGame() {
+            // Reset game state
+            snake = [{ x: 200, y: 200 }];
+            food = { x: 160, y: 160 };
+            dx = box;
+            dy = 0;
+            score = 0;
+            scoreElement.textContent = "Score: " + score;
+            
+            // Show game elements
+            canvas.style.display = "block";
+            scoreElement.style.display = "block";
+            startButton.style.display = "none";
+            gameTitle.style.display = "none";
+            
+            // Start game loop
+            gameInterval = setInterval(gameLoop, 100);
+            document.addEventListener("keydown", changeDirection);
+        }
+
+        function gameOver() {
+            clearInterval(gameInterval);
+            document.removeEventListener("keydown", changeDirection);
+            alert("Game Over! Your Score: " + score);
+            
+            // Show start screen again
+            canvas.style.display = "none";
+            scoreElement.style.display = "none";
+            startButton.style.display = "block";
+            gameTitle.style.display = "block";
+        }
+
         function gameLoop() {
             update();
             draw();
         }
-        setInterval(gameLoop, 100);
+
+        startButton.addEventListener("click", startGame);
     </script>
 </body>
 </html>
